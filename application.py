@@ -13,10 +13,13 @@ Updated 13th April 2018
 + Used Python3 SocketIO implementation
 + Updated CDN Javascript and CSS sources
 
+Updated 26th July 2019 - Jim Martens
++ Added an extra parameter
++ Added Google Charts UI 
+TODO: 
++ Buttons and send value to server.
++ Change random to heat tracking to target.
 """
-
-
-
 
 # Start with a basic flask app webpage.
 from flask_socketio import SocketIO, emit
@@ -24,7 +27,6 @@ from flask import Flask, render_template, url_for, copy_current_request_context
 from random import random
 from time import sleep
 from threading import Thread, Event
-
 
 __author__ = 'slynn'
 
