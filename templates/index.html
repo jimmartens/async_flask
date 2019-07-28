@@ -6,7 +6,7 @@
     <script src="static/js/application.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-google.charts.load('current', {'packages':['gauge']});
+google.charts.load('current', {'packages':['gauge','corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
 var chart;
@@ -16,6 +16,11 @@ var options;
 var chart2;
 var data2;
 var options2;
+
+var tickCount = 0;
+var tableData;
+var tableOptions;
+var tableChart;
 
 function drawChart() {
   data = google.visualization.arrayToDataTable([
@@ -27,8 +32,8 @@ function drawChart() {
     width: 200, height: 200,
     yellowFrom:350, yellowTo: 450,
     redFrom: 450, redTo: 500,
-    majorTicks: 100,
-    minorTicks: 20,
+    minorTicks:25,
+    majorTicks:[100,200,300,400,500],
     min: 0,
     max: 500
   };
@@ -40,12 +45,24 @@ function drawChart() {
 
   options2 = {
     width: 200, height: 200,
-    yellowFrom:140, yellowTo: 250,
-    redFrom: 250, redTo: 300,
-    majorTicks: 100,
-    minorTicks: 20,
+    yellowFrom:160, yellowTo: 190,
+    redFrom: 190, redTo: 300,
+    majorTicks:[100,200,300],
     min: 0,
     max: 300
+  };
+
+  tableData = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+  tableOptions = {
+    title: 'Company Performance',
+    curveType: 'function',
+    legend: { position: 'bottom' }
   };
 
   chart = new google.visualization.Gauge(document.getElementById('chart_div'));
@@ -53,6 +70,9 @@ function drawChart() {
 
   chart2 = new google.visualization.Gauge(document.getElementById('chart2_div'));
   chart2.draw(data2, options2);
+
+  tableChart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+  tableChart.draw(tableData, tableOptions);
 }
 
 $(document).ready(function(){
@@ -72,10 +92,12 @@ $(document).ready(function(){
 
     data.setValue(0, 1, 40 + Math.round(msg.number)); 
     data2.setValue(0, 1, 40 + (Math.round(msg.number)-20));
+    
     chart.draw(data, options); 
-    chart.draw(data2, options);
+    chart2.draw(data2, options2);
 
-    //callme(new_data,new_options);
+
+
     for (var i = 0; i < numbers_received.length; i++){
       numbers_string = numbers_string + '<p>' + numbers_received[i].toString() + '</p>';
     }
@@ -92,11 +114,13 @@ $(document).ready(function(){
 }
 .column {
   flex: 50%;
+  vertical-align:top;
   padding: 10px;
 }
     </style>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="static/favicon.ico">
   </head>
   <body>
     <div class="container">
@@ -113,6 +137,7 @@ $(document).ready(function(){
         <div class="column">
           <p>Asynchronous page updates will appear here:</p>
           <h3>Number list:</h3>
+          <div id="log"></div> <!-- /#log -->
         </div>
         <div class="column">
           <div class="row">
@@ -122,8 +147,9 @@ $(document).ready(function(){
           </div>
         </div>
       </div>
-      <div id="log">
-      </div> <!-- /#log -->
+      <div class="row">
+        <div id="curve_cart"></div>
+      </div>
     </div>
 
   </body>

@@ -56,7 +56,8 @@ class RandomThread(Thread):
         while not thread_stop_event.isSet():
             number = round(random()*100, 0)
             print(number)
-            socketio.emit('newnumber', {'number': number}, namespace='/test')
+            socketio.emit('newnumber', {'number': number}, namespace='/test') #?? what's the test for?
+            ##TODO send second number
             sleep(self.delay)
 
     def run(self):
