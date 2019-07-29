@@ -21,6 +21,11 @@ var tickCount = 0;
 var tableData;
 var tableOptions;
 var tableChart;
+var tableEnd = 2007; //time
+var columnCount = 1;
+
+var today;
+var time;
 
 function drawChart() {
   data = google.visualization.arrayToDataTable([
@@ -52,15 +57,14 @@ function drawChart() {
     max: 300
   };
 
+  today = new Date();
   tableData = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
+          ['Time', 'Grill', 'Meat'],
+          [2004,  50,      50]          
         ]);
+
   tableOptions = {
-    title: 'Company Performance',
+    title: 'Temperatures',
     curveType: 'function',
     legend: { position: 'bottom' }
   };
@@ -96,7 +100,14 @@ $(document).ready(function(){
     chart.draw(data, options); 
     chart2.draw(data2, options2);
 
-
+    if(columnCount > 10) {
+      tableData.removeRow(0);
+    } else {
+      columnCount = columnCount + 1;    
+    }
+    tableEnd = tableEnd + 1;
+    tableData.addRow([tableEnd, 40 + Math.round(msg.number), 40 + (Math.round(msg.number)-20)]); 
+    tableChart.draw(tableData, tableOptions);
 
     for (var i = 0; i < numbers_received.length; i++){
       numbers_string = numbers_string + '<p>' + numbers_received[i].toString() + '</p>';
@@ -148,7 +159,7 @@ $(document).ready(function(){
         </div>
       </div>
       <div class="row">
-        <div id="curve_cart"></div>
+        <div id="curve_chart"></div>
       </div>
     </div>
 
