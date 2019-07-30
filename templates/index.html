@@ -23,6 +23,8 @@ var tableOptions;
 var tableChart;
 var tableEnd = 2007; //time
 var columnCount = 1;
+var grillTarget = 250;
+var meatTarget = 160;
 
 var today;
 var time;
@@ -58,15 +60,23 @@ function drawChart() {
   };
 
   today = new Date();
+  time = /* today.getHours() + ":" + */ today.getMinutes() + ":" + today.getSeconds();
   tableData = google.visualization.arrayToDataTable([
-          ['Time', 'Grill', 'Meat'],
-          [2004,  50,      50]          
+          ['Time', 'Grill', 'Meat', 'Grill Target', 'Meat Target'],
+          [time, 50, 50, grillTarget, meatTarget]
         ]);
 
   tableOptions = {
     title: 'Temperatures',
     curveType: 'function',
-    legend: { position: 'bottom' }
+    series: {
+      0: { lineDashStyle: [1, 1] },
+      1: { lineDashStyle: [2, 2] },
+      2: { lineDashStyle: [4, 4] },
+      3: { lineDashStyle: [5, 1, 3] },
+      4: { lineDashStyle: [4, 1] }
+    },
+    legend: 'bottom'
   };
 
   chart = new google.visualization.Gauge(document.getElementById('chart_div'));
@@ -100,13 +110,15 @@ $(document).ready(function(){
     chart.draw(data, options); 
     chart2.draw(data2, options2);
 
-    if(columnCount > 10) {
+    if(columnCount > 5) {
       tableData.removeRow(0);
     } else {
       columnCount = columnCount + 1;    
     }
     tableEnd = tableEnd + 1;
-    tableData.addRow([tableEnd, 40 + Math.round(msg.number), 40 + (Math.round(msg.number)-20)]); 
+    today = new Date();
+    time = /* today.getHours() + ":" + */ today.getMinutes() + ":" + today.getSeconds();
+    tableData.addRow([time, 40 + Math.round(msg.number), 40 + (Math.round(msg.number)-20), grillTarget, meatTarget]); 
     tableChart.draw(tableData, tableOptions);
 
     for (var i = 0; i < numbers_received.length; i++){

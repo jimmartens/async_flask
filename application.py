@@ -41,6 +41,24 @@ socketio = SocketIO(app)
 thread = Thread()
 thread_stop_event = Event()
 
+class GrillSimulator(Thread):
+    def __init__(self):
+        self.delay = 2
+        super(GrillSimulator, self).__init()
+
+    def grillSimulatorGenerator(self):
+        """
+        Simulate the behaviour of a grill.
+        """
+
+        while not thread_stop_event.isSet():
+            number = 0
+            sleep(self.delay)
+
+    def run(self):
+        self.grillSimulatorGenerator()
+
+
 class RandomThread(Thread):
     def __init__(self):
         self.delay = 4
