@@ -96,6 +96,11 @@ $(document).ready(function(){
   //receive details from server
   socket.on('newnumber', function(msg) {
     console.log("Received number" + msg.number);
+
+    socket.emit( 'my event', {
+      data: 'TEST CALL FROM CLIENT'
+    } )
+
     //maintain a list of ten numbers
     if (numbers_received.length >= 5){
       numbers_received.shift()
@@ -124,6 +129,8 @@ $(document).ready(function(){
       numbers_string = numbers_string + '<p>' + numbers_received[i].toString() + '</p>';
     }
     $('#log').html(numbers_string);
+
+
   });
 });
     </script>
@@ -172,6 +179,13 @@ $(document).ready(function(){
         <div class="column">
           <h3>Number list:</h3>
           <div id="log"></div> <!-- /#log -->          
+        </div>
+        <div class="column">
+          <form action="" method="POST">
+            <input type="text" class="username" placeholder="User Name"/>
+            <input type="text" class="message" placeholder="Messages"/>
+            <input type="submit"/>
+          </form>
         </div>
       </div>
     </div>
